@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text, TouchableWithoutFeedback } from 'react-native';
 import { Link } from 'react-router-native';
 
+
 const styles = StyleSheet.create({
     container: {
         marginLeft: 20
