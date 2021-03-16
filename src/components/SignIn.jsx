@@ -7,15 +7,15 @@ import { Formik } from 'formik';
 import useSignIn from '../hooks/useSignIn';
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 15,
-        backgroundColor: 'white'
-    }
+  container: {
+    padding: 15,
+    backgroundColor: 'white'
+  }
 });
 
 const initialValues = {
-    username: '',
-    password: '',
+  username: '',
+  password: '',
 };
 
 const validationSchema = yup.object().shape({
@@ -29,13 +29,22 @@ const validationSchema = yup.object().shape({
     .required('Password is required'),
 });
 
+
 const SignInForm = ({ onSubmit }) => {
   return (
     <View style={styles.container}>
-      <FormikTextInput name="username" placeholder="Username" />
-      <FormikTextInput secureTextEntry name="password" placeholder="Password" />
-      <Button color='#0366d6' onPress={onSubmit} title="Sign in" />
+      <FormikTextInput name="username" placeholder="Username" testID="username" />
+      <FormikTextInput secureTextEntry name="password" placeholder="Password" testID="password" />
+      <Button color='#0366d6' onPress={onSubmit} title="Sign in" testID="submit" />
     </View>
+  );
+};
+
+export const SignInContainer = ({ onSubmit }) => {
+  return (
+    <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+      {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
+    </Formik>
   );
 };
 
@@ -56,9 +65,7 @@ const SignIn = () => {
   };
   
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-      {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
-    </Formik>
+    <SignInContainer onSubmit={onSubmit} />
   );
 };
 

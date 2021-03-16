@@ -62,28 +62,28 @@ const RepositoryItem = ({ item }) => (
             uri: item.ownerAvatarUrl
             }}/>
         <View>
-          <Text style={styles.name}>{item.fullName}</Text>
-          <Text style={styles.text}>{item.description}</Text>
+          <Text style={styles.name} testID='fullName'>{item.fullName}</Text>
+          <Text style={styles.text} testID='description'>{item.description}</Text>
           <View style={styles.languageView}>
-            <Text style={styles.languageText}>{item.language}</Text>
+            <Text style={styles.languageText} testID='language'>{item.language}</Text>
           </View>
         </View>
       </View>
       <View style={styles.stats}>
         <View style={styles.stat}>
-          <Text style={styles.number}>{item.stargazersCount}</Text>
+          <Text style={styles.number} testID='stargazersCount'>{item.stargazersCount}</Text>
           <Text>Stars</Text>
         </View>
         <View style={styles.stat}>
-          <Text style={styles.number}>{item.forksCount}</Text>
+          <Text style={styles.number} testID='forksCount'>{item.forksCount}</Text>
           <Text>Forks</Text>
         </View>
         <View style={styles.stat}>
-          <Text style={styles.number}>{item.reviewCount}</Text>
+          <Text style={styles.number} testID='reviewCount'>{item.reviewCount}</Text>
           <Text>Reviews</Text>
         </View>
         <View style={styles.stat}>
-          <Text style={styles.number}>{item.ratingAverage}</Text>
+          <Text style={styles.number} testID='ratingAverage'>{item.ratingAverage}</Text>
           <Text>Rating</Text>
         </View>
       </View>
