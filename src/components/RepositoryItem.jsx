@@ -1,5 +1,9 @@
+import { render } from '@testing-library/react-native';
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
+import * as Linking from 'expo-linking';
+import { useHistory, useParams } from "react-router-dom";
+import useRepository from '../hooks/useRepository';
 import Text from './Text';
 
 const styles = StyleSheet.create({
@@ -42,7 +46,8 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 15
+        marginTop: 15,
+        marginBottom: 15
     },
     stat: {
         flexDirection: 'column',
@@ -55,7 +60,19 @@ const styles = StyleSheet.create({
     }
   });
 
-const RepositoryItem = ({ item }) => (
+const RepositoryItem = ({ item }) => {
+  const { id } = useParams();
+  const { repository } = useRepository({ id });
+
+  if (repository === undefined ){
+    return null;
+  }
+
+  if(!item){
+    item = repository;
+  }
+
+  return (
     <View style={styles.container}>
       <View style={styles.upperContainer}>
         <Image  style={styles.image} source={{
@@ -87,12 +104,32 @@ const RepositoryItem = ({ item }) => (
           <Text>Rating</Text>
         </View>
       </View>
+      { id
+          ? <Button onPress={() => Linking.openURL(item.url)}title='Open on Github' color='#0366d6' />
+          : null
+      }
     </View>
-);
+  );
+};
+
+export const TouchableRepository = ({ item }) => {
+  const history = useHistory();
+
+  const onPress = () => {
+    history.push(`/repository/${item.id}`);
+  };
+
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <RepositoryItem item={item} />
+    </TouchableOpacity>
+  );
+};
 
 export const renderItem = ({ item }) => (
-    <RepositoryItem item={item} />
+  <TouchableRepository item={item} />
 );
+
 
 export default RepositoryItem;
   
