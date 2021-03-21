@@ -29,19 +29,19 @@ const AppBar = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView horizontal contentContainerStyle={styles.scroll}>
-        <AppBarTab link='/' text='Repositories' />
-        {authorizedUser ? (
+      {authorizedUser ? (
+        <ScrollView horizontal contentContainerStyle={styles.scroll}>
+          <AppBarTab link='/' text='Repositories' />
           <AppBarTab link='/create-review' text='Create a review' />
-        ):(
-          null
-        )}
-        {authorizedUser ? (
           <AppBarTab link='/signout' text='Sign out' onPress={signOut} />
-        ):(
+        </ScrollView>
+      ):(
+        <ScrollView horizontal contentContainerStyle={styles.scroll}>
+          <AppBarTab link='/' text='Repositories' />
           <AppBarTab link='/signin' text='Sign in' />
-        )}
-      </ScrollView>
+          <AppBarTab link='/signup' text='Sign up' />
+        </ScrollView>
+      )}
     </View>
   );
 };
