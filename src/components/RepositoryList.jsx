@@ -99,6 +99,7 @@ class RepositoryListContainer extends React.Component {
         renderItem={renderItem}
         keyExtractor={item => item.id}
         ListHeaderComponent={this.renderHeader}
+        onEndReached={props.onEndReach}
       />
     );
   }
@@ -108,12 +109,17 @@ const RepositoryList = () => {
   const [selectedOrder, setSelectedOrder] = useState();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchQueryValue] = useDebounce(searchQuery, 500);
-  const { repositories } = useRepositories({ ...getOrder(selectedOrder), searchKeyword: searchQueryValue });
+  const { repositories, fetchMore } = useRepositories({ ...getOrder(selectedOrder), searchKeyword: searchQueryValue });
 
 
   const repositoryNodes = repositories
   ? repositories.edges.map(edge => edge.node)
   : [];
+
+  const onEndReach = () => {
+    fetchMore();
+  };
+
 
   return (
     <RepositoryListContainer 
@@ -121,7 +127,9 @@ const RepositoryList = () => {
     setSelectedOrder={setSelectedOrder}
     searchQuery={searchQuery}
     setSearchQuery={setSearchQuery}
-    repositoryNodes={repositoryNodes} />
+    repositoryNodes={repositoryNodes}
+    onEndReach={onEndReach} 
+    />
   );
 };
 

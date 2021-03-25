@@ -149,7 +149,11 @@ const ItemSeparator = () => <View style={styles.separator} />;
 
 const SingleRepository = ({ item }) => {
   const { id } = useParams();
-  const { repository } = useRepository({ id });
+  const { repository, fetchMore } = useRepository({ id: id, first: 10 });
+
+  const onEndReach = () => {
+    fetchMore();
+  };
 
   if (repository === undefined ){
     return null;
@@ -170,6 +174,8 @@ const SingleRepository = ({ item }) => {
       renderItem={({ item }) => <ReviewItem review={item} />}
       keyExtractor={({ id }) => id}
       ListHeaderComponent={() => <View style={styles.flatListInfo}><RepositoryInfo item={item} id={id} /></View>}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
     />
   );
 };
