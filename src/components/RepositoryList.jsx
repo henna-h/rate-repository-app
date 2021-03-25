@@ -4,6 +4,8 @@ import { renderItem } from './RepositoryItem';
 import useRepositories from '../hooks/useRepositories';
 import { useState } from 'react';
 import {Picker} from '@react-native-picker/picker';
+import { Searchbar } from 'react-native-paper';
+import { useDebounce } from 'use-debounce';
 
 const styles = StyleSheet.create({
   separator: {
@@ -13,6 +15,18 @@ const styles = StyleSheet.create({
     padding: 10
   }
 });
+
+const SearchBar = ({ searchQuery, setSearchQuery }) => {
+  const onChangeSearch = query => setSearchQuery(query);
+
+  return (
+    <Searchbar
+      placeholder="Search"
+      onChangeText={onChangeSearch}
+      value={searchQuery}
+    />
+  );
+};
 
 const SortList = ({ selectedOrder, setSelectedOrder }) => {
 
@@ -32,6 +46,20 @@ const SortList = ({ selectedOrder, setSelectedOrder }) => {
   );
 };
 
+const Header = (props) => {
+  return(
+    <View>
+      <SearchBar
+        searchQuery={props.searchQuery}
+        setSearchQuery={props.setSearchQuery}
+      />
+      <SortList 
+      selectedOrder={props.selectedOrder} setSelectedOrder={props.setSelectedOrder}
+      />
+    </View>
+  );
+};
+
 const ItemSeparator = () => <View style={styles.separator} />;
 
 const getOrder = (selectedOrder) => {
@@ -47,29 +75,53 @@ const getOrder = (selectedOrder) => {
   }
 };
 
-const RepositoryListContainer = () => {
-  const [selectedOrder, setSelectedOrder] = useState();
-  const { repositories } = useRepositories(getOrder(selectedOrder));
+class RepositoryListContainer extends React.Component {
+  
+  renderHeader = () => {
+    const props = this.props;
+    
+    return (
+      <Header 
+      selectedOrder={props.selectedOrder} setSelectedOrder={props.setSelectedOrder}
+      searchQuery={props.searchQuery}
+      setSearchQuery={props.setSearchQuery}
+      />
+    );
+  };
 
-  const repositoryNodes = repositories
-    ? repositories.edges.map(edge => edge.node)
-    : [];  
+  render(){
+    const props = this.props;
 
-  return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={renderItem}
-      keyExtractor={item => item.id}
-      ListHeaderComponent={() => <SortList selectedOrder={selectedOrder} setSelectedOrder={setSelectedOrder} />}
-    />
-  );
-};
+    return (
+      <FlatList
+        data={props.repositoryNodes}
+        ItemSeparatorComponent={ItemSeparator}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+        ListHeaderComponent={this.renderHeader}
+      />
+    );
+  }
+}
 
 const RepositoryList = () => {
+  const [selectedOrder, setSelectedOrder] = useState();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQueryValue] = useDebounce(searchQuery, 500);
+  const { repositories } = useRepositories({ ...getOrder(selectedOrder), searchKeyword: searchQueryValue });
+
+
+  const repositoryNodes = repositories
+  ? repositories.edges.map(edge => edge.node)
+  : [];
 
   return (
-    <RepositoryListContainer />
+    <RepositoryListContainer 
+    selectedOrder={selectedOrder} 
+    setSelectedOrder={setSelectedOrder}
+    searchQuery={searchQuery}
+    setSearchQuery={setSearchQuery}
+    repositoryNodes={repositoryNodes} />
   );
 };
 

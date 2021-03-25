@@ -5,12 +5,12 @@ import { Link } from 'react-router-native';
 
 const styles = StyleSheet.create({
     container: {
-        marginLeft: 20
+      marginLeft: 20
     },
     text: {
-        color: 'white',
-        fontSize: 24,
-        fontWeight: '700',
+      color: 'white',
+      fontSize: 18,
+      fontWeight: '700',
     }
   });
 
