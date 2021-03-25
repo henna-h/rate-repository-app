@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
-  const { authorizedUser } = useAuthorizedUser();
+  const { authorizedUser } = useAuthorizedUser({});
   const [signOut] = useSignOut();
 
   return (
@@ -33,6 +33,7 @@ const AppBar = () => {
         <ScrollView horizontal contentContainerStyle={styles.scroll}>
           <AppBarTab link='/' text='Repositories' />
           <AppBarTab link='/create-review' text='Create a review' />
+          <AppBarTab link='/my-reviews' text='My reviews' />
           <AppBarTab link='/signout' text='Sign out' onPress={signOut} />
         </ScrollView>
       ):(
